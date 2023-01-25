@@ -1,10 +1,10 @@
-# Splashtop ZTNA Provision Tool
+# Splashtop ZTNA POC Provisioning Tool
 
-This project provides a tool that can provision an isolated cloud-based network POC environment for IT admin or devops engineer to evaluate zero trust network access solutions. 
+This open-source project offers a tool for creating an isolated cloud-based network POC environment for IT admins or DevOps engineers to test zero-trust network access solutions. 
 
 ## Architecture 
 
-This tool is implemented by using Hashicorp Terraform. It provisions AWS EC2 medium instance, a Kubernetes (kind cluster) on top of the EC2 instance, and multiple network services as well as k8s pods on top of Kubernetes cluster:
+This tool, built with Hashicorp Terraform, sets up a single AWS EC2 medium instance, a Kubernetes cluster (using kind), and various network services and k8s pods on top of the Kubernetes cluster:
 
 | Service  |  Protocol    | Network Address in K8s               | Login |
 |----------|--------------|-------------------------------|-------|
@@ -15,26 +15,30 @@ This tool is implemented by using Hashicorp Terraform. It provisions AWS EC2 med
 |NFS File Share| NFSv3| ztenv-mynfs.default.svc.cluster.local:2049||
 |Video Streaming| RTSP| ztenv-myrtsp.default.svc.cluster.local:8554||
 
-After provision the private network with the above services, it also deploys: 
-* A ZTNA connector as Linux service to connect the AWS EC2 instance to Splashtop ZTNA solution
-* A ZTNA connector as helm chart to connect all network services running on k8s to ZTNA solution
+Once the private network is provisioned with the services mentioned above, it also deploys:
+
+* A ZTNA connector as a Linux service to link the AWS EC2 instance with the Splashtop ZTNA solution.
+* A ZTNA connector as a helm chart to connect all network services running on k8s to the ZTNA solution."
 
 ## Deployment 
-Before deploy, you will need to install Hashicorp Terraform.
+To deploy this POC project, you will first need to install Hashicorp Terraform.
 
-Here are the steps wrt how to deploy this POC project:
+Follow these steps:
 
-1. Create connector within Splashtop portal.  Logging in the portal, goto Deployment/Connector, click "Add Connector",  choose "Service Mode", fill in the connector meta data, click next, choose "Helm", there is section shows the helm command to install the connector, copy the value after "-n" parameter as the name of the connector and copy the "token" value as the connector access token. Leave the connector deployment page open.
-2. Run the terminal app, use "git pull" to pull the lastest code of this project, then run following command
+1. Create a connector within the Splashtop portal. Log in to the portal, go to Deployment/Connector, click "Add Connector", choose "Service Mode", fill in the connector meta data, click next, choose "Helm", there is section shows the helm command to install the connector, copy the value after "-n" parameter as the name of the connector and copy the "token" value as the connector access token. Keep the connector deployment page open.
+2. Open a terminal, use "git pull" to download the latest code for this project, then run the following commands:
+
+
 ```bash
 % cd terraform
 % terraform init
 % terraform apply
 ```
-The tool will prompt for the input in order to deploy the POC. You will need to provide :
-- var.deployment_name, give a name to your deployment, the name will also be the tag of your AWS EC2 instance
-- var.kind_connector_name, the connector name you copy from the above step
-- var.kind_connector_token, the token you copied from above step (remove the double quotes)
+The tool will ask for input to deploy the POC. You will need to provide:
+
+- var.deployment_name: The name for your deployment, this will also be used as the tag for your AWS EC2 instance.
+- var.kind_connector_name: The connector name you copied from the previous step.
+- var.kind_connector_token: The token you copied from the previous step, without the double quotes.
 
 
 ```bash
@@ -67,11 +71,11 @@ var.vm_connector_token
 ```
 ## Create ZTNA Application
 
-1. After terraform provision the POC successfully, the connector deployment page in the splashtop portal will show the connector is connected.
+1. After Terraform has successfully provisioned the POC, the connector deployment page in the Splashtop portal will indicate that the connector is connected.
 
-2. Create a testing app. In the portal, go to Applications/Applications, click "Create An Application", choose the RDP type and fill in "Host" as "ztenv-myrdp.default.svc.cluster.local" and "Port" as "3389". Save the application.
-3. Test the browser based RDP access. In the portal, launch the application by clicking the icon of the newly created RDP application in Applications/Applications.
+2. Create a test application. In the portal, navigate to Applications/Applications, click "Create An Application", select the RDP type, and enter "ztenv-myrdp.default.svc.cluster.local" as the "Host" and "3389" as the "Port". Save the application.
 
+3. Test the browser-based RDP access. In the portal, launch the newly created RDP application by clicking the icon in Applications/Applications.
 
 
 
