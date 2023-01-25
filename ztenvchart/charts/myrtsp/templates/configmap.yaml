@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rtsp-config
+data:
+  proxy.yml: |
+    server:
+        # supported protocols
+        protocols: [ tcp ]
+        # port of the RTSP UDP/TCP listener
+        rtspPort: 8554
+        # port of the RTP UDP listener
+        rtpPort: 8000
+        # port of the RTCP UDP listener
+        rtcpPort: 8001
+        
+    streams:
+        $STREAM_NAME:
+            url: $SOURCE_URL
+            # whether to receive this stream in udp or tcp
+            useTcp: $RTSP_PROXY_SOURCE_TCP

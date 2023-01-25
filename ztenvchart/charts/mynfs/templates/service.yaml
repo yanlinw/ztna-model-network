@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "mynfs.fullname" . }}
+  labels:
+    {{- include "mynfs.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: nfs
+      protocol: TCP
+      name: nfs
+  selector:
+    {{- include "mynfs.selectorLabels" . | nindent 4 }}
