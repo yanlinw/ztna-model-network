@@ -21,7 +21,23 @@ Once the private network is provisioned with the services mentioned above, it al
 * A ZTNA connector as a helm chart to connect all network services running on k8s to the ZTNA solution."
 
 ## Deployment 
-To deploy this POC project, you will first need to install Hashicorp Terraform. Also, AWS Command Line Interface (CLI) must be set up and configured on the local machine before the deployment. To set up the AWS CLI, you will need to have an AWS account and install the AWS CLI software on your local machine. Once the CLI is installed, you can configure it with your AWS credentials and begin using it to interact with AWS services, detail steps are [here](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html) . 
+To deploy this POC project, you will first need to install Hashicorp Terraform. Also, AWS Command Line Interface (CLI) must be set up and configured on the local machine before the deployment. To set up the AWS CLI, you will need to have an AWS account and install the AWS CLI software on your local machine. Once the CLI is installed, you can configure it with your AWS credentials and begin using it to interact with AWS services, detail steps are [here](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html).
+
+After the AWS configuration, use the following command to get the preferred profile name that you want to use for the deployment 
+
+```bash
+% aws configure list-profiles
+```
+
+Configure the terraform by using the profile name from the above step. Update the file terraform/variables.tf
+
+```YAML
+variable "aws_profile" {
+  description = "AWS profile"
+  type        = string
+  default     = "myprofile"
+}
+```
 
 Follow these steps:
 
