@@ -36,5 +36,5 @@ variable "aws_region" {
 variable "aws_profile" {
   description = "AWS profile"
   type        = string
-  default     = "aad-sso-sjcrd02"
+  default     = "myprofile"
 }

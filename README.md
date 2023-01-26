@@ -21,7 +21,7 @@ Once the private network is provisioned with the services mentioned above, it al
 * A ZTNA connector as a helm chart to connect all network services running on k8s to the ZTNA solution."
 
 ## Deployment 
-To deploy this POC project, you will first need to install Hashicorp Terraform.
+To deploy this POC project, you will first need to install Hashicorp Terraform. Also, AWS Command Line Interface (CLI) must be set up and configured on the local machine before the deployment. To set up the AWS CLI, you will need to have an AWS account and install the AWS CLI software on your local machine. Once the CLI is installed, you can configure it with your AWS credentials and begin using it to interact with AWS services, detail steps are [here](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html) . 
 
 Follow these steps:
 
@@ -77,6 +77,13 @@ var.vm_connector_token
 
 3. Test the browser-based RDP access. In the portal, launch the newly created RDP application by clicking the icon in Applications/Applications.
 
+## Teardown the POC environments
+
+To remove all AWS resources that you have created, you will need to run cli:
+
+```bash
+% terraform destroy
+```
 
 
 
