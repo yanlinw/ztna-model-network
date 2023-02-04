@@ -45,6 +45,13 @@ spec:
               port: rdp
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            {{ range $path, $bytes := .Files.Glob  "xfce/**" }}
+            {{ $name := base $path }}
+              - name: cm-multi-file-volume
+                mountPath: {{ printf "/usr/share/backgrounds/xfce/%s"  $name | indent 2 }}
+                subPath: {{- sha256sum (printf "xfce/%s" $name ) | indent 2 }}
+            {{ end }}    
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -57,3 +64,7 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      volumes:
+            - name: cm-multi-file-volume
+              configMap:
+                name: cm-multi-file-rdp

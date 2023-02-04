@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cm-multi-file
+binaryData:
+{{ range $path, $bytes := .Files.Glob "xfce/**" }}
+{{ $name := base $path }}
+{{- sha256sum (printf "xfce/%s" $name ) | indent 2 }}{{ print ": "}}{{ $.Files.Get $path | b64enc}}
+{{ end }}
