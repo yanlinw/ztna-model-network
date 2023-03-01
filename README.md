@@ -21,7 +21,19 @@ Once the private network is provisioned with the services mentioned above, it al
 * A ZTNA connector as a helm chart to connect all network services running on k8s to the ZTNA solution."
 
 ## Deployment 
-To deploy this POC project, you will first need to install Hashicorp Terraform. Also, AWS Command Line Interface (CLI) must be set up and configured on the local machine before the deployment. To set up the AWS CLI, you will need to have an AWS account and install the AWS CLI software on your local machine. Once the CLI is installed, you can configure it with your AWS credentials and begin using it to interact with AWS services, detail steps are [here](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html).
+To deploy this POC project, you will first need to install Hashicorp Terraform. 
+While executing terraform init you might face the below error if you are working in a Mac with M1 chip in it,
+```
+template v2.2.0 does not have a package available for your current platform, darwin_arm64
+```
+
+Please follow the steps given below to install the [m1-terraform-provider-helper](https://github.com/kreuzwerker/m1-terraform-provider-helper):
+```
+brew install kreuzwerker/taps/m1-terraform-provider-helper
+m1-terraform-provider-helper activate
+m1-terraform-provider-helper install hashicorp/template -v v2.2.0
+```
+Also, AWS Command Line Interface (CLI) must be set up and configured on the local machine before the deployment. To set up the AWS CLI, you will need to have an AWS account and install the AWS CLI software on your local machine. Once the CLI is installed, you can configure it with your AWS credentials and begin using it to interact with AWS services, detail steps are [here](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html).
 
 After the AWS configuration, use the following command to get the preferred profile name that you want to use for the deployment 
 
@@ -42,14 +54,15 @@ variable "aws_profile" {
 Follow these steps:
 
 1. Create a connector within the Splashtop portal. Log in to the portal, go to Deployment/Connector, click "Add Connector", choose "Service Mode", fill in the connector meta data, click next, choose "Helm", there is section shows the helm command to install the connector, copy the value after "-n" parameter as the name of the connector and copy the "token" value as the connector access token. Keep the connector deployment page open.
-2. Open a terminal, use "git pull" to download the latest code for this project, then run the following commands:
 
+2. Open a terminal, use "git pull" to download the latest code for this project, then run the following commands:
 
 ```bash
 % cd terraform
 % terraform init
 % terraform apply
 ```
+
 The tool will ask for input to deploy the POC. You will need to provide:
 
 - var.deployment_name: The name for your deployment, this will also be used as the tag for your AWS EC2 instance.
@@ -100,12 +113,3 @@ To remove all AWS resources that you have created, you will need to run cli:
 ```bash
 % terraform destroy
 ```
-
-
-
-
-
-
-
-
-
