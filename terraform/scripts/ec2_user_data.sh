@@ -69,7 +69,7 @@ main_function() {
     export ZTW_CONNECTOR=${vm_connector_name}
     if [ -n "$ZTW_CONNECTOR" ]; then
         if [ -n "$ZTW_CONNECTOR_TOKEN" ]; then
-            curl "http://splashlock-assets.splashshield.ai/connector/stage/setup.sh" | sudo bash -s $ZTW_CONNECTOR 
+            curl -fsSL "https://ssw-artifacts.s3.us-west-2.amazonaws.com/connector/prod/setup.sh"  | sudo bash -s $ZTW_CONNECTOR 
             sudo $ZTW_CONNECTOR -install -configPath /etc/$ZTW_CONNECTOR -conf $ZTW_CONNECTOR_TOKEN
             sudo systemctl start $ZTW_CONNECTOR
         fi
@@ -80,8 +80,8 @@ main_function() {
     export K8S_CONNECTOR=${kind_connector_name} 
     if [ -n "$K8S_CONNECTOR" ]; then
         if [ -n "K8S_CONNECTOR_TOKEN" ]; then
-            helm repo add ztw-connector-stage http://splashlock-assets.splashshield.ai/helm-chart/ztw-connector-stage/ 
-            helm upgrade --install -n $K8S_CONNECTOR ztw-connector-stage ztw-connector-stage/ztw-connector --set token=$K8S_CONNECTOR_TOKEN --create-namespace --wait
+            helm repo add ssw-connector https://ssw-artifacts.s3.us-west-2.amazonaws.com/helm-chart/ssw-connector --force-update 
+            helm upgrade --install -n ssw-connector $K8S_CONNECTOR  ssw-connector/ssw-connector --set token=$K8S_CONNECTOR_TOKEN --create-namespace --wait
         fi
     fi    
 
